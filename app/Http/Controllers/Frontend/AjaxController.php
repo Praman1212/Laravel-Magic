@@ -13,7 +13,8 @@ class AjaxController extends Controller
      */
     public function index()
     {
-        return view('ajax.index');
+        $items = Ajax::all();
+        return view('ajax.index',compact('items'));
     }
 
     /**
@@ -46,7 +47,8 @@ class AjaxController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $item = Ajax::find($id);
+        return view('ajax.show', compact('item'));
     }
 
     /**
@@ -70,6 +72,8 @@ class AjaxController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $item = Ajax::findOrFail($id);
+        $item->delete();
+        return redirect()->back();
     }
 }
