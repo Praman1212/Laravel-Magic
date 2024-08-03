@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ajax;
 use Illuminate\Http\Request;
 
 class AjaxController extends Controller
@@ -12,7 +13,7 @@ class AjaxController extends Controller
      */
     public function index()
     {
-        return view('frontend-content.index');
+        return view('ajax.index');
     }
 
     /**
@@ -20,7 +21,7 @@ class AjaxController extends Controller
      */
     public function create()
     {
-        //
+        return view('ajax.create');
     }
 
     /**
@@ -28,7 +29,16 @@ class AjaxController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->only([
+            'name',
+            'phone',
+            'email'
+        ]);
+        Ajax::create($data);
+        return response()->json([
+            'route' => route('ajax.index'),
+            'status' => 'Form submitted successfully'
+        ]);
     }
 
     /**

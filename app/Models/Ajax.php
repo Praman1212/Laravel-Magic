@@ -9,5 +9,5 @@ use app\Http\Controllers\AjaxController;
 class Ajax extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'];
+    protected $fillable = ['name','phone','email'];
 }

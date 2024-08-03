@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('ajaxes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('phone');
+            $table->string('email');
             $table->timestamps();
         });
     }
