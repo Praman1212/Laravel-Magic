@@ -4,10 +4,11 @@
         $('#ajaxForm').on('submit', function(event) {
             event.preventDefault();
             var dataItem = $(this).serialize();
-            var url = '{{ route('ajax.store') }}';
+            var url = $('#ajaxForm').attr('action');
+            var method = '{{ isset($item) ? 'PUT' : 'POST' }}';
             $.ajax({
                 url: url,
-                type: 'POST',
+                type: method,
                 data: dataItem,
                 success: function(response) {
                     sessionStorage.setItem('status', response.status);
@@ -35,3 +36,9 @@
         }
     });
 </script>
+<!-- For delete message -->
+ <script>
+    function approveMessage(){
+        return confirm('Are you sure want to delete the data?')
+    }
+ </script>

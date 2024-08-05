@@ -13,7 +13,7 @@ class AjaxController extends Controller
      */
     public function index()
     {
-        $items = Ajax::all();
+        $items = Ajax::latest()->get();
         return view('ajax.index',compact('items'));
     }
 
@@ -56,7 +56,8 @@ class AjaxController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $item = Ajax::findOrFail($id);
+        return view('ajax.create',compact('item'));
     }
 
     /**
@@ -64,7 +65,13 @@ class AjaxController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->only(['name','email','phone']);
+        $item = Ajax::findOrFail($id);
+        $item->update($data);
+        return response()->json([
+            'route' => route('ajax.index'),
+            'status' => 'Form updated successfully'
+        ]);
     }
 
     /**
