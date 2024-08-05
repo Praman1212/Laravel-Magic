@@ -1,6 +1,6 @@
 <h1>Let's create ajax Form using jquey and laravel</h1>
 <p>Make model name Ajax with migration file</p>
-<p style="background:red">php artisan make:model Ajax -m</p>
+<p text="red">php artisan make:model Ajax -m</p>
 
 <p>Inside migration file</p>
 
