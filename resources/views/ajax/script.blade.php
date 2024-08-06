@@ -11,8 +11,13 @@
                 type: method,
                 data: dataItem,
                 success: function(response) {
-                    sessionStorage.setItem('status', response.status);
-                    window.location.href = response.route;
+                    console.log(response)
+                    // partial view concept
+                    if (response.url) {
+                        history.pushState(null, '', response.url);
+                        $('.partial-view').empty();
+                        $('.partial-view').append(response.data)
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error(error)
@@ -37,8 +42,8 @@
     });
 </script>
 <!-- For delete message -->
- <script>
-    function approveMessage(){
+<script>
+    function approveMessage() {
         return confirm('Are you sure want to delete the data?')
     }
- </script>
+</script>

@@ -14,7 +14,7 @@ class AjaxController extends Controller
     public function index()
     {
         $items = Ajax::latest()->get();
-        return view('ajax.index',compact('items'));
+        return view('ajax.index', compact('items'));
     }
 
     /**
@@ -35,10 +35,14 @@ class AjaxController extends Controller
             'phone',
             'email'
         ]);
+        
+        // partial view concept
         Ajax::create($data);
+        $items = Ajax::all();
+        $partialView = view('ajax.table', ['items' => $items])->render();
         return response()->json([
-            'route' => route('ajax.index'),
-            'status' => 'Form submitted successfully'
+            'data' => $partialView,
+            'url' => route('ajax.index')
         ]);
     }
 
@@ -57,7 +61,7 @@ class AjaxController extends Controller
     public function edit(string $id)
     {
         $item = Ajax::findOrFail($id);
-        return view('ajax.create',compact('item'));
+        return view('ajax.create', compact('item'));
     }
 
     /**
@@ -65,13 +69,10 @@ class AjaxController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $request->only(['name','email','phone']);
+        $data = $request->only(['name', 'email', 'phone']);
         $item = Ajax::findOrFail($id);
         $item->update($data);
-        return response()->json([
-            'route' => route('ajax.index'),
-            'status' => 'Form updated successfully'
-        ]);
+        return redirect()->route('ajax.index')->with('status', 'form updated successfully');
     }
 
     /**

@@ -1,7 +1,8 @@
 @extends('layout.section')
 @section('title', isset($item) ? 'Edit Ajax' : 'Create Ajax')
 @section('section')
-<div class="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
+
+<div class="flex flex-col items-center p-6 bg-gray-100 min-h-screen partial-view">
     <div class="w-full max-w-6xl">
         <div class="flex bg-gray-800 text-white justify-center items-center h-12 rounded-t">
             Ajax Form
@@ -29,6 +30,11 @@
             </div>
             <div class="mt-2">
                 <button type="submit" id="ajaxButton" class="bg-blue-900 px-4 py-1 text-white rounded ">{{ isset($item) ? 'Update' : 'Save' }}</button>
+                <a href="{{ url()->previous()  }}">
+                    <button type="button" id="ajaxBackButton" class="bg-gray-600 px-4 py-1 text-white rounded ">
+                        Back
+                    </button>
+                </a>
             </div>
         </form>
     </div>

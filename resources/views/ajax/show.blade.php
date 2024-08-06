@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="mt-2">
-                <a href="{{ route('ajax.index') }}" class="bg-gray-600 text-white rounded py-1 px-3">
+                <a href="{{ url()->previous() }}" class="bg-gray-600 text-white rounded py-1 px-3">
                     Back
                 </a>
             </div>
