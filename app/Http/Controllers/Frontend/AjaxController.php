@@ -52,7 +52,11 @@ class AjaxController extends Controller
     public function show(string $id)
     {
         $item = Ajax::find($id);
-        return view('ajax.show', compact('item'));
+        $partialView = view('ajax.show',['item' => $item])->render();
+        return response()->json([
+            'data' => $partialView,
+            'url' => route('ajax.show',$item->id)
+        ]);
     }
 
     /**
@@ -64,7 +68,7 @@ class AjaxController extends Controller
         $partialView = view('ajax.create',['item' => $item])->render();
         return response()->json([
             'data' => $partialView,
-            'url' => route('ajax.show',$item->id)
+            'url' => route('ajax.edit',$item->id)
         ]);
     }
 

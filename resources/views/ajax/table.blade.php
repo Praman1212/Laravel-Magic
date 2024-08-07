@@ -27,13 +27,12 @@
 
                 <!-- Action button -->
                 <td class="px-4 py-2 flex">
-                    <a href="{{route('ajax.show',$item->id)}}" class="m-1">
+
+                    <button type="button" class="m-1" id="ajax-show-button" data-id="{{ $item->id }}">
                         <i class="las la-eye bg-blue-800 text-white rounded p-1"></i>
-                    </a>
-                    <!-- <a href="{{ route('ajax.edit',$item->id) }}" class="m-1">
-                        <i class="las la-edit bg-green-800 text-white rounded p-1 ajax-edit-button"></i>
-                    </a> -->
-                    <button type="button" class="m-1" id="ajax-edit-button" data-id = "{{ $item->id }}">
+                    </button>
+
+                    <button type="button" class="m-1" id="ajax-edit-button" data-id="{{ $item->id }}">
                         <i class="las la-edit bg-green-800 text-white rounded p-1 ajax-edit-button"></i>
                     </button>
 
