@@ -10,11 +10,11 @@
 
 <body>
     <div class="flex w-[100vw] h-[100vh] here">
-        <div class="w-1/5 bg-blue-900 h-full">
+        <div class="w-1/6 bg-gray-900 h-full">
 
             @include('layout.sidebar')
         </div>
-        <div class="w-4/5  h-full">
+        <div class="w-5/6  h-full">
 
             @yield('section')
         </div>
