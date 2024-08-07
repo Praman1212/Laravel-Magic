@@ -87,7 +87,8 @@
 
 <span>Script</span>
 
-<!-- Ajax Form submit for create.blade.php -->
+
+    <h3>Ajax Form submit for create.blade.php</h3>  
     <script>
         $(document).ready(function() {
             $('#ajaxForm').on('submit', function(event) {
@@ -118,7 +119,7 @@
         });
     </script>
 
-<!-- Edit button of ajax form -->
+    <h3>Edit button of ajax form </h3>
     <script>
         $(document).ready(function() {
             // When you use data-id attribute then use this ho handle the click event
@@ -143,7 +144,7 @@
     </script>
 <!--  -->
 
-<!-- To get the status message -->
+    <h3>To get the status message</h3>
     <script>
         $(document).ready(function() {
             var statusMessage = sessionStorage.getItem('status');
@@ -156,7 +157,7 @@
             }
         });
     </script>
-<!-- For delete message -->
+    <h3>For delete message</h3>
     <script>
         function approveMessage() {
             return confirm('Are you sure want to delete the data?')
