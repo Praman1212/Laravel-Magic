@@ -1,66 +1,166 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<h1>Partial View Form using AJAX</h1>
+<span>Controller</span>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+    public function index()
+    {
+        $items = Ajax::latest()->get();
+        return view('ajax.index', compact('items'));
+    }
 
-## About Laravel
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('ajax.create');
+    }
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $data = $request->only([
+            'name',
+            'phone',
+            'email'
+        ]);
+        
+        // partial view concept
+        Ajax::create($data);
+        $items = Ajax::all();
+        $partialView = view('ajax.table', ['items' => $items])->render();
+        return response()->json([
+            'data' => $partialView,
+            'url' => route('ajax.index')
+        ]);
+    }
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $item = Ajax::find($id);
+        return view('ajax.show', compact('item'));
+    }
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $item = Ajax::findOrFail($id);
+        $partialView = view('ajax.create',['item' => $item])->render();
+        return response()->json([
+            'data' => $partialView,
+            'url' => route('ajax.show',$item->id)
+        ]);
+    }
 
-## Learning Laravel
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $data = $request->only(['name', 'email', 'phone']);
+        $item = Ajax::findOrFail($id);
+        $item->update($data);
+        $items = Ajax::all();
+        $partialView = view('ajax.table', ['items' => $items])->render();
+        return response()->json([
+            'data' => $partialView,
+            'url' => route('ajax.index')
+        ]);
+    }
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $item = Ajax::findOrFail($id);
+        $item->delete();
+        return redirect()->back();
+    }
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+<span>Script</span>
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    <h3>Ajax Form submit for create.blade.php</h3>  
+    <script>
+        $(document).ready(function() {
+            $('#ajaxForm').on('submit', function(event) {
+                event.preventDefault();
+                var dataItem = $(this).serialize();
+                var url = $('#ajaxForm').attr('action');
+                var method = '{{ isset($item) ? 'PUT' : 'POST' }}';
+                $.ajax({
+                    url: url,
+                    type: method,
+                    data: dataItem,
+                    success: function(response) {
+                        console.log(response)
+                        // partial view concept
+                        if (response.url) {
+                            history.pushState(null, '', response.url);
+                            $('.partial-view').empty();
+                            $('.partial-view').append(response.data)
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error)
+                        alert('Form submission error');
+                    }
+                })
+    
+            });
+        });
+    </script>
 
-### Premium Partners
+    <h3>Edit button of ajax form </h3>
+    <script>
+        $(document).ready(function() {
+            // When you use data-id attribute then use this ho handle the click event
+            $(document).on('click', '#ajax-edit-button', function(event) {
+                event.preventDefault();
+                var id = $(this).data('id');
+                var url = '/ajax/' +id+ '/edit' ;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response){
+                        console.log(response)
+                        if(response.url){
+                            history.pushState(null,'',response.url);
+                            $('.here').empty();
+                            $('.here').append(response.data);
+                        }
+                    }
+                })
+            });
+        })
+    </script>
+<!--  -->
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+    <h3>To get the status message</h3>
+    <script>
+        $(document).ready(function() {
+            var statusMessage = sessionStorage.getItem('status');
+            if (statusMessage) {
+                $('#statusMessage').text(statusMessage).removeClass('hidden');
+                setTimeout(function() {
+                    $('#statusMessage').addClass('hidden')
+                    sessionStorage.removeItem('status');
+                }, 2000);
+            }
+        });
+    </script>
+    <h3>For delete message</h3>
+    <script>
+        function approveMessage() {
+            return confirm('Are you sure want to delete the data?')
+        }
+    </script>
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
