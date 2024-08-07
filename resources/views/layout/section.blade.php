@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div class="flex w-[100vw] h-[100vh]">
+    <div class="flex w-[100vw] h-[100vh] here">
         <div class="w-1/5 bg-blue-900 h-full">
 
             @include('layout.sidebar')

@@ -61,7 +61,11 @@ class AjaxController extends Controller
     public function edit(string $id)
     {
         $item = Ajax::findOrFail($id);
-        return view('ajax.create', compact('item'));
+        $partialView = view('ajax.create',['item' => $item])->render();
+        return response()->json([
+            'data' => $partialView,
+            'url' => route('ajax.show',$item->id)
+        ]);
     }
 
     /**
@@ -72,7 +76,12 @@ class AjaxController extends Controller
         $data = $request->only(['name', 'email', 'phone']);
         $item = Ajax::findOrFail($id);
         $item->update($data);
-        return redirect()->route('ajax.index')->with('status', 'form updated successfully');
+        $items = Ajax::all();
+        $partialView = view('ajax.table', ['items' => $items])->render();
+        return response()->json([
+            'data' => $partialView,
+            'url' => route('ajax.index')
+        ]);
     }
 
     /**

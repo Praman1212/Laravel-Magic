@@ -28,6 +28,32 @@
         });
     });
 </script>
+
+<!-- Edit button of ajax form -->
+<script>
+    $(document).ready(function() {
+        // When you use data-id attribute then use this ho handle the click event
+        $(document).on('click', '#ajax-edit-button', function(event) {
+            event.preventDefault();
+            var id = $(this).data('id');
+            var url = '/ajax/' +id+ '/edit' ;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response){
+                    console.log(response)
+                    if(response.url){
+                        history.pushState(null,'',response.url);
+                        $('.here').empty();
+                        $('.here').append(response.data);
+                    }
+                }
+            })
+        });
+    })
+</script>
+<!--  -->
+
 <!-- To get the status message -->
 <script>
     $(document).ready(function() {
