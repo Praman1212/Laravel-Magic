@@ -15,7 +15,7 @@ class EmailController extends Controller
     public function index()
     {
         $items = Email::all();
-        return view('email.index',compact('items'));
+        return view('email.index', compact('items'));
     }
 
     /**
@@ -31,6 +31,7 @@ class EmailController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $data = $request->only([
             'your_email',
             'client_email',
@@ -43,6 +44,7 @@ class EmailController extends Controller
                 ->to($email->client_email)
                 ->subject('New Message');
         });
+        return redirect()->route('email.index')->with('status','Email sent successfully');
     }
 
     /**
@@ -58,8 +60,8 @@ class EmailController extends Controller
      */
     public function edit(string $id)
     {
-        $item = Email::find($id);
-        return view('email.create',compact('item'));
+        // $item = Email::find($id);
+        // return view('email.edit', compact('item'));
     }
 
     /**
@@ -67,6 +69,7 @@ class EmailController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        dd($request->all());
         $data = $request->only([
             'your_email',
             'client_email',

@@ -8,9 +8,8 @@
             + Add
         </button>
     </div>
-    <div class="relative">
-        <div id="statusMessage" class="w-full absolute top-0 right-0 bg-green-500 text-white p-2 rounded hidden"></div>
-    </div>
+    @include('email.create')
+
     <div class="w-full max-w-6xl max-h-[75vh] overflow-y-auto">
         <table class="table-auto w-full  bg-white shadow-md rounded-lg overflow-hidden">
             <thead class="bg-blue-900 text-white">
@@ -27,11 +26,16 @@
                     <td class="px-4 py-2">{{ $loop->iteration }}</td>
                     <td class="px-4 py-2">{{$item->your_email}}</td>
                     <td class="px-4 py-2">{{$item->client_email}}</td>
-                    <td class="px-4 py-2">
-                        <a href="{{ route('email.edit',$item->id                                            ) }}">
+                    <td class="px-4 py-2 flex">
+                        <!-- <a href="{{ route('email.edit',$item->id) }}" class="m-1">
                             <i class="las la-edit bg-green-800 text-white rounded p-1 ajax-edit-button"></i>
-                        </a>
-                        <form action="{{ route('email.destroy', $item->id) }}" method="POST" class="m-1" onsubmit="return approveMessage()">
+                        </a> -->
+
+                        <button class="m-1 email-edit-btn" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" data-id="{{ $item->id }}" data-your-email="{{ $item->your_email }}" data-client-email="{{ $item->client_email }}" data-message="{{ $item->message }}">
+                            <i class="las la-edit bg-green-800 text-white rounded p-1 ajax-edit-button"></i>
+                        </button>
+
+                        <form action="{{ route('email.destroy', $item->id) }}" class="m-1" method="POST" onsubmit="return approveMessage()">
                             @csrf
                             @method('DELETE')
                             <button type="submit">
@@ -39,15 +43,12 @@
                             </button>
                         </form>
                     </td>
-
-                    <!-- Action button -->
-
                 </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
 </div>
-
+@include('email.script')
 
 @endsection
