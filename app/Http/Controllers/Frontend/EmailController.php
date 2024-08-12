@@ -31,7 +31,6 @@ class EmailController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $data = $request->only([
             'your_email',
             'client_email',
@@ -44,7 +43,10 @@ class EmailController extends Controller
                 ->to($email->client_email)
                 ->subject('New Message');
         });
-        return redirect()->route('email.index')->with('status','Email sent successfully');
+        return response()->json([
+            'route' => route('email.index'),
+            'status' => 'Email stored successfully'
+        ]);
     }
 
     /**
@@ -60,8 +62,7 @@ class EmailController extends Controller
      */
     public function edit(string $id)
     {
-        // $item = Email::find($id);
-        // return view('email.edit', compact('item'));
+        // 
     }
 
     /**
@@ -69,7 +70,6 @@ class EmailController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        dd($request->all());
         $data = $request->only([
             'your_email',
             'client_email',
@@ -84,7 +84,10 @@ class EmailController extends Controller
                 ->subject('New Message');
         });
 
-        return redirect()->route('email.index');
+        return response()->json([
+            'route' => route('email.index'),
+            'status' => 'Email update successfully'
+        ]);
     }
 
     /**
@@ -94,6 +97,9 @@ class EmailController extends Controller
     {
         $item = Email::find($id);
         $item->delete();
-        return redirect()->back();
+        return response()->json([
+            'route' => route('email.index'),
+            'status' => 'Email deleted successfully'
+        ]);
     }
 }
