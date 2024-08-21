@@ -2,9 +2,9 @@
 @section('title', 'Email Index')
 @section('section')
 
-<div class="flex flex-col p-6 bg-gray-100 min-h-screen ">
+<div class="flex flex-col items-center p-6 bg-gray-100 min-h-screen ">
 
-    <div class="flex justify-between items-center mb-6">
+    <div class="w-full max-w-6xl mb-6 flex justify-start ">
 
         <!-- Right-aligned (button) -->
         <div class="w-fit flex justify-start">
@@ -20,8 +20,8 @@
 
     @include('email.create')
     <div class="flex items-center">
-        <div class="w-full max-w-6xl max-h-[75vh] overflow-y-auto">
-            <table class="table-auto w-full  bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="w-screen max-w-6xl max-h-[75vh] overflow-y-auto">
+            <table class="table-auto w-full bg-white shadow-md rounded-lg overflow-hidden">
                 <thead class="bg-blue-900 text-white">
                     <tr class="text-left">
                         <th class="px-4 py-2">S.N.</th>
@@ -70,8 +70,8 @@
                 </tbody>
             </table>
         </div>
-
     </div>
+
 </div>
 @include('email.script')
 @endsection

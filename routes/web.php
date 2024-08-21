@@ -2,19 +2,16 @@
 
 use App\Http\Controllers\Frontend\AjaxController;
 use App\Http\Controllers\Frontend\EmailController;
+use App\Http\Controllers\Frontend\UrlController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
-
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
 
 Route::resource('ajax',AjaxController::class);
-Route::resource('email',EmailController::class);    
+Route::resource('email',EmailController::class); 
 
-require __DIR__.'/auth.php';
+Route::get('/', function () {
+    return view('redis.index');
+});
+Route::post('/shorten', [UrlController::class, 'store']);
+Route::get('/{shortCode}', [UrlController::class, 'redirect']);
+
