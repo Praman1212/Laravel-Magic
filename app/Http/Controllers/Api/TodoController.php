@@ -17,13 +17,12 @@ class TodoController extends Controller
     {
         $data = Todo::all();
 
-         return response()->json([
+        return response()->json([
             'status' => 200,
-            'success'=> true,
+            'success' => true,
             'data' => TodoResources::collection($data),
             'message' => 'Todo List data fetched successfully.'
         ], Response::HTTP_OK);
-    
     }
 
     /**
@@ -49,7 +48,6 @@ class TodoController extends Controller
             'data' => new TodoResources($item),
             'message' => "Data stored successfully"
         ], Response::HTTP_CREATED);
-        
     }
 
     /**
@@ -60,7 +58,7 @@ class TodoController extends Controller
         $data = Todo::find($id);
         return response()->json([
             'status' => 200,
-            'success'=> true,
+            'success' => true,
             'data' => new TodoResources($data),
             'message' => 'Data shown successfully.'
         ], Response::HTTP_OK);
@@ -71,16 +69,23 @@ class TodoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $item = $request->only([
-            'title'
+        $item = Todo::find($id);
+        $data = $request->only([
+            'title',
+            'image'
         ]);
-        $data = Todo::find($id);
-        $data->update($item);
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $hashedName = md5($image->getClientOriginalName() . time()) . '.' . $image->extension();
+            $imagePath = $image->storeAs('uploads/todo', $hashedName, 'public');
+            $data['image'] = $imagePath;
+        }
+        $item->update($data);
         return response()->json([
             'status' => 200,
             'success' => true,
-            'data' => new TodoResources($data),
-            'message'=> 'Data updated successfully'
+            'data' => new TodoResources($item),
+            'message' => 'Data updated successfully'
         ], Response::HTTP_OK);
     }
 
@@ -92,8 +97,8 @@ class TodoController extends Controller
         $data = Todo::find($id);
         $data->delete();
         return response()->json([
-            'status'=>200,
-            'success'=> true,
+            'status' => 200,
+            'success' => true,
             'data' => new TodoResources($data),
             'message' => "Data deleted successfully"
         ], Response::HTTP_OK);
