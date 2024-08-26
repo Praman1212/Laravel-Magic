@@ -16,8 +16,9 @@ class TodoResources extends JsonResource
     {
         $data = [
             'id' => $this->id,
-            'Title' => $this->title,
-            'Time' => $this->created_at
+            'title' => $this->title,
+            'created_at' => $this->created_at,
+            'image'=> asset('uploads/todo'.$this->image)
         ];
 
         return $data;

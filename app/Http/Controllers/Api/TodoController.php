@@ -32,8 +32,16 @@ class TodoController extends Controller
     public function store(Request $request)
     {
         $data = $request->only([
-            'title'
+            'title',
+            'image'
         ]);
+        // php artisan storage:link
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $hashedName = md5($image->getClientOriginalName() . time()) . '.' . $image->extension();
+            $imagePath = $image->storeAs('uploads/todo', $hashedName, 'public');
+            $data['image'] = $imagePath;
+        }
         $item = Todo::create($data);
         return response()->json([
             'status' => 200,
